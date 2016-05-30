@@ -14,7 +14,7 @@ print ""
 
 # Open streetlist.txt
 streetlist_file = open("streetlist.txt", "w")
-streetlist_file.write("ZIP   STREET")
+streetlist_file.write("ZIP   STREET\n")
 
 # parse a query search string qsearch and iterate database output into streetlist.txt
 c = sqlite3.connect('streetz.db')
