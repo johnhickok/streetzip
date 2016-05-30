@@ -14,13 +14,13 @@ print ""
 
 # Open streetlist.txt
 streetlist_file = open("streetlist.txt", "w")
-streetlist_file.write("ZIP   STREET\n")
+streetlist_file.write("ZIP   STREET + VERTEX COUNT\n")
 
 # parse a query search string qsearch and iterate database output into streetlist.txt
 c = sqlite3.connect('streetz.db')
-qsrch = "SELECT [st_name], [zip] FROM streetz WHERE zip like '%" + user_zip + "%' AND st_name like '%" + user_street + "%' ORDER BY [st_name]"
+qsrch = "SELECT [st_name], [zip], [st_count] FROM streetz WHERE zip like '%" + user_zip + "%' AND st_name like '%" + user_street + "%' ORDER BY [st_name]"
 for row in c.execute(qsrch):
-  streetlist_file.write(str(row[1]) + " " + str(row[0]) + "\n")
+  streetlist_file.write(str(row[1]) + " " + str(row[0]) + " " + str(row[2]) + "\n")
 
 
 streetlist_file.close()

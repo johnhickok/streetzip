@@ -1,0 +1,132 @@
+ZIP   STREET + VERTEX COUNT
+91505 Allen Avenue 2
+91505 Arvilla Avenue 1
+91505 Barham Boulevard 1
+91505 Bob Hope Drive 14
+91505 Burbank Airport 13
+91505 Burbank Boulevard 114
+91505 Burbank Chandler Bikeway 1
+91505 Burton Avenue 1
+91505 Califa Street 1
+91505 Camarillo Street 15
+91505 Clyborne Avenue 6
+91505 Clybourn Avenue 39
+91505 Cohasset Street 5
+91505 Cumpston Street 1
+91505 Edison Boulevard 9
+91505 Empire Avenue 13
+91505 Erwin Street 1
+91505 Evergreen Street 14
+91505 Florence Street 2
+91505 Forman Avenue 2
+91505 Franklin Avenue 2
+91505 Hatteras Street 2
+91505 Hollywood Way 110
+91505 Hood Avenue 1
+91505 Huston Street 1
+91505 Jacaranda Avenue 3
+91505 Jeffries Avenue 1
+91505 Kemp Street 2
+91505 Kenwood Street 8
+91505 Keswick Street 2
+91505 Kling Street 3
+91505 Lakeside Drive 3
+91505 Lockheed Drive 2
+91505 Lull Street 1
+91505 Magnolia Boulevard 5
+91505 Margate Street 1
+91505 Mc Cormick Street 1
+91505 Mc Farlane Avenue 3
+91505 Media Center Montessori Infant/Toddler 2
+91505 Monterey Avenue 3
+91505 Myrna Street 1
+91505 National Avenue 5
+91505 North Avon Street 14
+91505 North Buena Vista Street 33
+91505 North California Street 12
+91505 North Catalina Street 7
+91505 North Cordova Street 8
+91505 North Damon Way 2
+91505 North Dymond Street 2
+91505 North Fairview Street 11
+91505 North Florence Street 2
+91505 North Ford Street 2
+91505 North Frederic Street 9
+91505 North Hollywood Way 55
+91505 North Kenwood Street 6
+91505 North Lima Street 10
+91505 North Manning Street 2
+91505 North Maple Street 7
+91505 North Moorpark Street 1
+91505 North Naomi Street 10
+91505 North Niagara Street 12
+91505 North Ontario Street 7
+91505 North Pass Avenue 50
+91505 North Priscilla Lane 3
+91505 North Rose Street 8
+91505 North Screenland Drive 8
+91505 North Toluca Park Drive 3
+91505 North Valley Street 12
+91505 North Whitnall Highway 12
+91505 Olive Avenue 42
+91505 Ontario Street 2
+91505 Otsego Street 1
+91505 Oxnard Street 3
+91505 Pacific Avenue 3
+91505 Parkside Avenue 2
+91505 Pass Avenue 2
+91505 Pepper Street 2
+91505 Placidia Avenue 1
+91505 Riverside Drive 88
+91505 Rosemary Lane 3
+91505 San Fernando Road 26
+91505 Sancola Avenue 1
+91505 Sarah Street 2
+91505 Saticoy Street 2
+91505 Sherman Way 2
+91505 South Avon Street 1
+91505 South Buena Vista Street 8
+91505 South California Street 7
+91505 South Cordova Street 2
+91505 South Fairview Street 4
+91505 South Florence Street 2
+91505 South Frederic Street 2
+91505 South Gaylord Drive 2
+91505 South Hollywood Way 3
+91505 South Naomi Street 2
+91505 South Niagara Street 5
+91505 South Rose Street 2
+91505 South Valley Street 3
+91505 Thorton Avenue 1
+91505 Tiara Street 1
+91505 Toluca Lake Lane 2
+91505 Valerio Street 1
+91505 Valhalla Drive 2
+91505 Vanowen Place 4
+91505 Vanowen Street 59
+91505 Ventura Freeway 15
+91505 Victory Boulevard 112
+91505 Warner Blvd. 2
+91505 Warner Boulevard 6
+91505 Weddington Street 1
+91505 West Alameda Avenue 77
+91505 West Chandler Boulevard 3
+91505 West Chandler Boulevard North 3
+91505 West Chandler Boulevard South 1
+91505 West Chermak Street 2
+91505 West Clark Avenue 2
+91505 West Heffron Drive 2
+91505 West Magnolia Boulevard 117
+91505 West Monterey Ave 1
+91505 West Oak Street 5
+91505 West Olive Avenue 40
+91505 West Toluca Lake Lane 3
+91505 West Valerio Street 2
+91505 West Valleyheart Drive 1
+91505 West Verdugo Avenue 1
+91505 West Verdugo Avenue; Verdugo Avenue 74
+91505 Wheatland Avenue 3
+91505 Whitnall Highway 4
+91505 Willow Street 2
+91505 Woodland Avenue 2
+91505 Wyoming Avenue 3
