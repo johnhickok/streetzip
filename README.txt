@@ -12,4 +12,4 @@ sample_unidecode.py was used to replace non-utf-8 characters from your OSM data 
 
 summary.zip contains a csv file containing the same street names, counts of street names, and corresponding zip codes that are in streetz.md. Some people just want raw data, so here is a copy.
 
-jhickok2011@gmail.com, 2016-06-01
+
