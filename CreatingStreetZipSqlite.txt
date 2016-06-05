@@ -101,4 +101,12 @@ Use pgAdmin to extract a csv file from your spatial query's results.
 CREATE A SQLITE DATABASE WITH YOUR STREETS
 Sqlite3 is free and in the public domain. Yiou can download a copy at .sqlite.org.
 
+A FEW MORE NOTES...
+Open Address main site
+https://openaddresses.io/
 
+Recent upload from FOSS4GNA, OpenAddresses: A collection of open address data, 35 min.
+https://www.youtube.com/watch?v=yeGwD9-hxoU 
+
+U.S. DOT article, DOT presses forward on National Address Database
+https://www.transportation.gov/fastlane/pressing-forward-on-national-address-database
