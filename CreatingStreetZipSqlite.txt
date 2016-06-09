@@ -85,21 +85,46 @@ Upon loading everything correctly, enter the following query into pgAdmin's SQL 
 SELECT 
 osm_pts.name AS st_name,
 COUNT(osm_pts.name) as st_count,
-zip_codes.zip_code AS zip
+zip_codes.zip_code AS zip,
+zip_codes.name AS community
 FROM zip_codes
 JOIN osm_pts
 ON ST_Contains(zip_codes.geom, osm_pts.geom)
-GROUP BY osm_pts.name, zip_codes.zip_code
+GROUP BY osm_pts.name, zip_codes.zip_code, zip_codes.name
 ORDER BY osm_pts.name
 ;
 
 
-The above assumes the shapefiles you loaded into PostGIS were osm_pts for your OSM roads points and zip_codes for your zip code polygons. A count of street name and zip code pairs was added as a quality check for your data.
+The above assumes the shapefiles you loaded into PostGIS were osm_pts for your OSM roads points and zip_codes for your zip code polygons. A count of street name and zip code pairs was added as a quality check for your data. The zip_codes.name field is the postal community name.
+
+
+
+
 
 Use pgAdmin to extract a csv file from your spatial query's results.
 
+st_name|st_count|zip|community
+Marble Lane|2|92309|Baker
+Marble Lane|2|96116|Likely
+Marble Mountain Lane|31|96032|Fort Jones
+Marble Mountain Road|1|95682|Shingle Springs
+Marble Mountain Road|57|95762|El Dorado Hills
+Marble Peak Trail|395|93920|Big sur
+Marble Peak Trail|82|93927|Greenfield
+Marble Place|2|92843|Garden Grove
+
+
+
 CREATE A SQLITE DATABASE WITH YOUR STREETS
-Sqlite3 is free and in the public domain. Yiou can download a copy at .sqlite.org.
+Sqlite3 is free and in the public domain. You can download a copy at .sqlite.org.
+
+sqlite3 streetz.db
+
+CREATE TABLE streetz (st_name text, st_count integer, zip text, community text);
+.separator '|'
+.import streetz.csv streetz
+CREATE INDEX streetz_index on streetz (st_name, zip);
+
 
 A FEW MORE NOTES...
 Open Address main site

@@ -1,0 +1,93 @@
+STREET, CITY, ZIP, VERTEX COUNT
+, Burbank, 91505 | 0
+Barham Boulevard, Burbank, 91505 | 1
+Burbank Airport, Burbank, 91505 | 83
+Burbank Chandler Bikeway, Burbank, 91505 | 19
+Califa Street, Burbank, 91505 | 1
+Clybourn Avenue, Burbank, 91505 | 17
+Cohasset Street, Burbank, 91505 | 7
+Cumpston Street, Burbank, 91505 | 1
+Erwin Street, Burbank, 91505 | 1
+Evergreen Street, Burbank, 91505 | 34
+Florence Street, Burbank, 91505 | 19
+Franklin Avenue, Burbank, 91505 | 3
+Hatteras Street, Burbank, 91505 | 6
+Hollywood Way, Burbank, 91505 | 6
+Hood Avenue, Burbank, 91505 | 4
+Huston Street, Burbank, 91505 | 1
+Jacaranda Avenue, Burbank, 91505 | 4
+Kemp Street, Burbank, 91505 | 6
+Kenwood Street, Burbank, 91505 | 20
+Keswick Street, Burbank, 91505 | 1
+Kling Street, Burbank, 91505 | 10
+Lakeside Drive, Burbank, 91505 | 7
+Lockheed Drive, Burbank, 91505 | 7
+Lull Street, Burbank, 91505 | 1
+Margate Street, Burbank, 91505 | 1
+Mc Cormick Street, Burbank, 91505 | 1
+Mc Farlane Avenue, Burbank, 91505 | 7
+Monterey Avenue, Burbank, 91505 | 3
+Myrna Street, Burbank, 91505 | 1
+National Avenue, Burbank, 91505 | 10
+North Avon Street, Burbank, 91505 | 26
+North California Street, Burbank, 91505 | 13
+North Catalina Street, Burbank, 91505 | 35
+North Cordova Street, Burbank, 91505 | 19
+North Damon Way, Burbank, 91505 | 8
+North Fairview Street, Burbank, 91505 | 37
+North Florence Street, Burbank, 91505 | 4
+North Ford Street, Burbank, 91505 | 4
+North Frederic Street, Burbank, 91505 | 31
+North Hollywood Way, Burbank, 91505 | 2
+North Kenwood Street, Burbank, 91505 | 13
+North Lima Street, Burbank, 91505 | 20
+North Manning Street, Burbank, 91505 | 4
+North Maple Street, Burbank, 91505 | 25
+North Moorpark Street, Burbank, 91505 | 1
+North Naomi Street, Burbank, 91505 | 20
+North Niagara Street, Burbank, 91505 | 19
+North Ontario Street, Burbank, 91505 | 8
+North Pass Avenue, Burbank, 91505 | 17
+North Priscilla Lane, Burbank, 91505 | 4
+North Rose Street, Burbank, 91505 | 29
+North Screenland Drive, Burbank, 91505 | 20
+North Toluca Park Drive, Burbank, 91505 | 16
+North Valley Street, Burbank, 91505 | 30
+North Whitnall Highway, Burbank, 91505 | 20
+Ontario Street, Burbank, 91505 | 12
+Otsego Street, Burbank, 91505 | 1
+Parkside Avenue, Burbank, 91505 | 4
+Pass Avenue, Burbank, 91505 | 8
+Sancola Avenue, Burbank, 91505 | 2
+Sarah Street, Burbank, 91505 | 16
+Saticoy Street, Burbank, 91505 | 2
+South Avon Street, Burbank, 91505 | 2
+South California Street, Burbank, 91505 | 7
+South Fairview Street, Burbank, 91505 | 12
+South Frederic Street, Burbank, 91505 | 4
+South Gaylord Drive, Burbank, 91505 | 6
+South Naomi Street, Burbank, 91505 | 3
+South Niagara Street, Burbank, 91505 | 14
+South Rose Street, Burbank, 91505 | 6
+South Valley Street, Burbank, 91505 | 9
+Tiara Street, Burbank, 91505 | 1
+Valerio Street, Burbank, 91505 | 1
+Valhalla Drive, Burbank, 91505 | 4
+Vanowen Place, Burbank, 91505 | 4
+Vanowen Street, Burbank, 91505 | 2
+Ventura Freeway, Burbank, 91505 | 11
+Victory Boulevard, Burbank, 91505 | 2
+Warner Boulevard, Burbank, 91505 | 10
+Weddington Street, Burbank, 91505 | 1
+West Chandler Boulevard, Burbank, 91505 | 6
+West Chermak Street, Burbank, 91505 | 6
+West Clark Avenue, Burbank, 91505 | 16
+West Heffron Drive, Burbank, 91505 | 10
+West Monterey Ave, Burbank, 91505 | 1
+West Toluca Lake Lane, Burbank, 91505 | 2
+West Valerio Street, Burbank, 91505 | 6
+West Valleyheart Drive, Burbank, 91505 | 7
+Wheatland Avenue, Burbank, 91505 | 1
+Whitnall Highway, Burbank, 91505 | 4
+Willow Street, Burbank, 91505 | 5
+Woodland Avenue, Burbank, 91505 | 2
