@@ -130,6 +130,14 @@ A FEW MORE NOTES...
 Open Address main site
 https://openaddresses.io/
 
+OGR2OGR SAMPLE
+For California alone OpenAddress provides over 100 csv and vrt files that can be batch converted:
+ogr2ogr -f "ESRI Shapefile" los_angeles.shp los_angeles.vrt
+
+Setting up a Pelias Instance
+https://mapzen.com/blog/pelias-setup-tutorial/
+MapZen describes how to build a geocoding instance on top of an OpenAddress dataset
+
 Recent upload from FOSS4GNA, OpenAddresses: A collection of open address data, 35 min.
 https://www.youtube.com/watch?v=yeGwD9-hxoU 
 

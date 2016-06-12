@@ -10,6 +10,6 @@ CreatingStreetZipSqlite.txt explains the steps it takes to create streetz.db fro
 
 sample_unidecode.py was used to replace non-utf-8 characters from your OSM data before geoprocessing with PostGIS.
 
-summary.zip contains a csv file containing the same street names, counts of street names, and corresponding zip codes that are in streetz.md. Some people just want raw data.
+summary.zip was removed to save space; a csv file can be easily extracted from streetz.db.
 
 
