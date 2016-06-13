@@ -130,6 +130,9 @@ A FEW MORE NOTES...
 Open Address main site
 https://openaddresses.io/
 
+steps for importing openaddress data directly from csv to postgis:
+http://www.kevfoo.com/2012/01/Importing-CSV-to-PostGIS/
+
 OGR2OGR SAMPLE
 For California alone OpenAddress provides over 100 csv and vrt files that can be batch converted:
 ogr2ogr -f "ESRI Shapefile" los_angeles.shp los_angeles.vrt

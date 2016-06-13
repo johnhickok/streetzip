@@ -1,7 +1,16 @@
-My Python scripts may be too simple to copyright, but the GPL2 is such a fine document. The real credit goes to OpenStreetMap!!!
+My Python scripts may be too simple to copyright, but I'll include the GPL2 document. 
 
-All data utilized/extracted from OpenStreetMap is credited to © OpenStreetMap contributors.
-Please visit the OpenStreetMap wiki for more info at http://www.openstreetmap.org/copyright.
+A special well deserved thankyou to goes to OpenStreetMap!!! The high quality data we use
+is credited to © OpenStreetMap contributors. Please visit the OpenStreetMap wiki for more 
+info at http://www.openstreetmap.org/copyright.
+
+A very special thanks to Geofabrik for making California data easily available for download.
+Please visit https://www.geofabrik.de/ for more information.
+
+Some special words of encouragement are given to the OpenAddress project. Please visit their
+main page at https://openaddresses.io/ or their GitHub page at 
+https://github.com/openaddresses/openaddresses.
+
 
 
                     GNU GENERAL PUBLIC LICENSE
