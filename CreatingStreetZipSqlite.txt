@@ -1,86 +1,81 @@
-CREATE A DATABASE OF UNIQUE STREET NAMES FROM OPEN STREETMAP
+CREATE A SQLITE DATABASE OF UNIQUE STREET NAMES FROM OPEN STREETMAP
 
 To get a list of streetnames and zipcodes, you will need to follow these steps.
 
 1. GIS DATA DOWNLOADS
 
-Download the statewide OPenStreetMap (OSM) shapefile, with thanks to Geofabrik
+Download the statewide OPenStreetMap (OSM) shapefile, with thanks to Geofabrik for making these downloads available!
 https://www.geofabrik.de/data/download.html
 
-A statewide shapefile of zipcodes can be downloaded from Esri as a layer package (lpk) file.
+A nationwide layer package (lpk) file of ZIP Codes is available from Esri:
 https://www.arcgis.com/home/item.html?id=8d2012a2016e484dafaac0451f9aea24
-A statewide shapefile can be extracted from this lpk file, but you'll need ArcGIS to do it.
+
+A shapefile of zipcode polygons can be extracted from this file, and Esri's ArcGIS is the highly recommended tool for this task. Esri offers free or low cost versions of its software:
+
+Free 60 Day Evaluation Edition (http://www.esri.com/software/arcgis/arcgis-for-desktop/free-trial)
+Student Editions (
+http://www.esri.com/landing-pages/education-promo)
+Home Use Program (
+http://www.esri.com/software/arcgis/arcgis-for-personal-use)
+
+If none of the above solutions are available, here is a hack that might work:
+- Download the lpk file.
+- Change the .lpk file extension to .zip
+- Extract one of the file geodatabases.
+- Open the file geodatabase in QGIS, select your state and 'Save As' the selected features to a shape file.
+
+
 
 2. CLEANUP OSM ROADS SHAPEFILE
-The first part can be easily done with QGIS, but exercize patience if your state is large.
+This next step is easily done with ArcGIS or QGIS, but exercize patience if your state is large. Using OGR utilities in the OSGeo4W Shell or UbuntuGIS for this step are not recommended because they don't handle non UTF-8 characters. More on that later.
 
-Add roads.shp to QGIS.
+From your OSM download, extract only the roads shapefile.
 
-Remove all fields except (street) name.
+Use your desktop GIS to remove all fields except (street) name from roads.shp.
 
 Select and delete all the features that don't have any street names.
 
-Simplify the geometry of your street features. Selecting 0.0002 degrees of arc as a minimum distance between nodes is about 80 feet and will reduce your node-load to around 25% of what you started with.
+Create a points shapfefile containing streetnames for every vertex of every roads feature. In arcGIS, use the Feature Vertices to Points tool. In QGIS, the Extract Nodes tool is found in the Vectors Menu, Geometry tools. Be patient. California has 10 million points.
 
-Extract Nodes to create a points shapfefile containing streetnames for every vertex of every roads feature.
+Finally, export these points to a comma separated text (csv) file containing street name, X (longitute) and Y (latitude) attributes. This is done in ArcMap by exporting your table as tab separated text, or in QGIS by right-clicking your shapefile and saving the file to CSV.
 
 3. USE PYTHON TO CLEAN UP NON UTF-8 CHARACTERS.
-Numerous street names in OSM contain special characters that are outside many charcter sets, including LATIN-1. These special characters wreak havock while working with PostGIS, so this step was added.
+Street names across the United States reflect a rich heritage of historical names with origins from many lanuages. Many names includes special characters outside the standard UTF-8 character set like ñ or ç from Spanish or French. Though PostGIS is capable of importing data in character sets like Latin1, oddities in OSM data make importing these datasets problematic.
 
-Use QGIS to save your OSM points to a comma separated text (csv) file.
+None of us find any joy in removing these special characters; replacing characters like ñ and ç with n and c, etc., was a quick fix to get this data into PostGIS. Cleaning up OSM data in a way to preserve these characters will wait for another day.
 
-You will need to create a Python script to iterate through all the lines of your csv file. The Unidecode library converts characters like ñ to n, etc.
+You will need to install the Unidecode library so you can import it into your Python scripts. More info on the Unidecode library is available at https://pypi.python.org/pypi/Unidecode.
 
-More info on the Unidecode library, visit
-https://pypi.python.org/pypi/Unidecode
+To install this library, you will need the current version of the Python Package Index (pip). To learn more about pip, visit https://pypi.python.org/pypi/pip.
 
-To install the unidecode library, you will need to install the latest version of pip,
-https://pypi.python.org/pypi/pip
+To verify which version of pip you have installed, enter the following into your console:
 
-If you need to update to the latest verison of pip, enter the following into the cmd or Windows powershell:
 python -m pip install -U pip
 
-More info on pip ugrades, including OSX or Linux, visit
-https://pip.pypa.io/en/stable/installing/#upgrading-pip
-
-
-
-then ask pip to install the unidecode library, then, in your shell running Python, enter
+Once you have pip 8.x installed, you install the Unidecode Library by entering the following into your console:
 
 pip install unidecode
 
-Your script can look something like this:
+This download includes a sample Python script that includes a Unicode function that iterates through each line of your CSV text file. If you are not too comfortable writing Python at this time, name your csv text file from your previous step infile.csv, then double-click sample_unicode.py. If you get a new file called outfile.csv, congrats!
 
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from unidecode import unidecode
-
-def remove_non_ascii(text):
-    return unidecode(unicode(text, encoding = "utf-8"))
-
-infile_csv = open('infile.csv', 'r')
-outfile_csv = open('outfile.csv', 'w')
-
-for s in infile_csv:
-    outfile_csv.write(remove_non_ascii(s))
-  
-infile_csv.close()
-outfile_csv.close()
-
-
-Once your output csv file is cleaned, create a new points shapefile in QGIS.
+Now you have a csv file made completely of UTF-8 characters, convert it back to a new shapefile.
 
 4. USE POSTGIS
-The next steps assumes the reader is familiar with PostGIS. If not, an abundance of online help is available. This workshop, provided by Boundless, is a favorite of many!
+It is assumed the reader is already a little familiar with PostGIS. If not, an abundance of online help is available. This workshop, provided by Boundless, is a favorite of many!
 http://workshops.boundlessgeo.com/postgis-intro/
 
 Use pgAdmin to set up your database.
 
-Use pgShapeLoader to load your shapefiles into PostGIS. Note your WKID is still likely 4326.
+Use pgShapeLoader to load your ZIP Code polygon and OSM point shapefiles into PostGIS. Note your WKID is still 4326.
 
-Upon loading everything correctly, enter the following query into pgAdmin's SQL Editor:
+In the SQL query blow, it is assumed you created these two tables in PostGIS from your shapefiles with these minimum attributes:
 
+Table       Attribute   Remarks
+zip_code    zip_code    ZIP Code as text
+zip_code    name        City or Community name
+osm_pts     name        Street name
+
+Enter the following SQL into the PGAdmin SQL editor. Note the spatial functions.
 
 SELECT 
 osm_pts.name AS st_name,
@@ -94,31 +89,31 @@ GROUP BY osm_pts.name, zip_codes.zip_code, zip_codes.name
 ORDER BY osm_pts.name
 ;
 
+A count of street name and zip code pairs was added as a quality check for your data.
 
-The above assumes the shapefiles you loaded into PostGIS were osm_pts for your OSM roads points and zip_codes for your zip code polygons. A count of street name and zip code pairs was added as a quality check for your data. The zip_codes.name field is the postal community name.
-
-
-
-
-
-Use pgAdmin to extract a csv file from your spatial query's results.
+Use pgAdmin to extract a csv file from your spatial query's results. This example uses pipes as the delimiter in case any street names have commas. For California, there will be about a half million records in this file.
 
 st_name|st_count|zip|community
-Marble Lane|2|92309|Baker
-Marble Lane|2|96116|Likely
-Marble Mountain Lane|31|96032|Fort Jones
-Marble Mountain Road|1|95682|Shingle Springs
-Marble Mountain Road|57|95762|El Dorado Hills
-Marble Peak Trail|395|93920|Big sur
-Marble Peak Trail|82|93927|Greenfield
-Marble Place|2|92843|Garden Grove
+Hendricks Road|221|95453|Lakeport
+Hendricks Street|3|95448|Healdsburg
+Hendricks Way|10|95678|Roseville
+Hendricksen Drive|3|92649|Huntington Beach
+Hendrickson Road|14|93023|Ojai
+Hendrika Way|8|96003|Redding
+Hendrikus Drive|8|94591|Vallejo
+Hendrix Avenue|105|91360|Thousand Oaks
+Hendrix Avenue|2|91711|Claremont
 
+Export this file as streetz.csv.
 
+5. CREATE A SQLITE DATABASE WITH YOUR STREETS
+Sqlite3 is free and in the public domain. You can download a copy at sqlite.org. sqlite3.exe for Windows is bundled with http://sqlite.org/2016/sqlite-tools-win32-x86-3130000.zip
 
-CREATE A SQLITE DATABASE WITH YOUR STREETS
-Sqlite3 is free and in the public domain. You can download a copy at .sqlite.org.
+In the console, enter
 
 sqlite3 streetz.db
+
+Your console now becomes a command line version of sqlite. Enter the following into this console. It is assumed you named your extract from the previous step as streetz.csv.
 
 CREATE TABLE streetz (st_name text, st_count integer, zip text, community text);
 .separator '|'
@@ -126,7 +121,8 @@ CREATE TABLE streetz (st_name text, st_count integer, zip text, community text);
 CREATE INDEX streetz_index on streetz (st_name, zip);
 
 
-A FEW MORE NOTES...
+
+APPENDIX: A FEW MORE NOTES...
 Open Address main site
 https://openaddresses.io/
 
