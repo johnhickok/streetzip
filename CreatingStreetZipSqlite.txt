@@ -56,7 +56,7 @@ Once you have pip 8.x installed, you install the Unidecode Library by entering t
 
 pip install unidecode
 
-This download includes a sample Python script that includes a Unicode function that iterates through each line of your CSV text file. If you are not too comfortable writing Python at this time, name your csv text file from your previous step infile.csv, then double-click sample_unicode.py. If you get a new file called outfile.csv, congrats!
+This Github reppsitory includes a sample Python script that includes a Unicode function that iterates through each line of your CSV text file. If you are not too comfortable writing Python at this time, name your csv text file from your previous step infile.csv, then double-click sample_unicode.py. If you get a new file called outfile.csv, congrats!
 
 Now you have a csv file made completely of UTF-8 characters, convert it back to a new shapefile.
 
@@ -64,9 +64,9 @@ Now you have a csv file made completely of UTF-8 characters, convert it back to 
 It is assumed the reader is already a little familiar with PostGIS. If not, an abundance of online help is available. This workshop, provided by Boundless, is a favorite of many!
 http://workshops.boundlessgeo.com/postgis-intro/
 
-Use pgAdmin to set up your database.
+Use PGAdmin to set up your database.
 
-Use pgShapeLoader to load your ZIP Code polygon and OSM point shapefiles into PostGIS. Note your WKID is still 4326.
+Use PGShapeLoader to load your ZIP Code polygon and OSM point shapefiles into PostGIS. Note your WKID is still 4326.
 
 In the SQL query blow, it is assumed you created these two tables in PostGIS from your shapefiles with these minimum attributes:
 
