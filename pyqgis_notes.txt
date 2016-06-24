@@ -1,4 +1,4 @@
-Cleaning up OSM Data in PYQGIS
+A few notes about using Python in QGIS and the OSGEO4W shell to automate these processes
 
 Deleting fields except "name".
 
@@ -10,16 +10,45 @@ Method 2 - Deleting the fields directly by selecting the layer from the Layers w
 layer = qgis.utils.iface.activeLayer()
 
 # The [0] represents the 1st field, so [1] is the 2nd field etc. To delete multiple fields, use the comma to separate. Eg. [0, 2, 4]
-res = layer.dataProvider().deleteAttributes([0])
+res = layer.dataProvider().deleteAttributes([0, 2, 3, 4, 5, 6, 7])
 
 # Updates the layer with the changes
 layer.updateFields()
 
 
+PyQGIS Cookbook
+http://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/
 
+modifying vector layers
+http://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/vector.html#modifying-vector-layers
 
+postgis and gdal
+http://www.postgresonline.com/journal/archives/31-GDAL-OGR2OGR-for-Data-Loading.html
 
+Use OSGEO4W console command line for replacing osm_pts table in PostGIS
 
-layer = qgis.utils.iface.activeLayer()
-res = layer.dataProvider().deleteAttributes([0, 2, 3, 4, 5, 6, 7])
-layer.updateFields()
+Drop the existing table:
+psql -h pghost -p 5432 -U pguser -d pgdbname -c "TRUNCATE TABLE osm_pts;"
+
+psql = Your'e asking the shell to access a PostGIS database.
+-h pghost the postgress host name, i.e. localhost.
+-p 5432 is your computer/server's port number. By default, PostGIS uses port 5432.
+-U pguser your PostGIS login name.
+-d pgdbname the name of your database in PostGIS
+-c -c "TRUNCATE TABLE osm_pts;" is your SQL statement that truncates table osm_pts
+
+example: psql -h localhost -p 5432 -U postgres -d test_joins -c "TRUNCATE TABLE osm_pts;"
+
+Append your table with your shapefile:
+ogr2ogr -append -f "PostgreSQL" PG:"host=pghost user=pgloginname dbname=pgdbname password=pgpassword" "C:\\mydata\\osm_pts.shp" -nln osm_pts
+
+ogr2ogr -append -f "PostgreSQL" = You're asking ogr2ogr to append a PostGIS database
+PG:"" is where you provide your credentials between the quotes
+host=pghost is the PostGIS host name
+user=pgloginname is the PostGIS login
+dbname=pgdbname is the PostGIS database name
+password=pgpassword is the PostGIS password
+"C:\\mydata\\osm_pts.shp" is the shapefile you want to upload
+-nln osm_pts indicates the PostGIS table you are appending
+
+example: ogr2ogr -append -f "PostgreSQL" PG:"host=localhost user=postgres dbname=test_joins password=postgres"  "C:\\mydata\\osm_pts.shp" -nln osm_pts

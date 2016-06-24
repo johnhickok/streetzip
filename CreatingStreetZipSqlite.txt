@@ -119,7 +119,7 @@ CREATE TABLE streetz (st_name text, st_count integer, zip text, community text);
 .separator '|'
 .import streetz.csv streetz
 CREATE INDEX streetz_index on streetz (st_name, zip);
-
+.quit
 
 
 APPENDIX: A FEW MORE NOTES...
