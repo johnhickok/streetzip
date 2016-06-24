@@ -1,0 +1,25 @@
+Cleaning up OSM Data in PYQGIS
+
+Deleting fields except "name".
+
+http://gis.stackexchange.com/questions/109078/how-to-delete-column-field-in-pyqgis
+
+Method 2 - Deleting the fields directly by selecting the layer from the Layers window (Table of Contents) and using the following code:
+
+# Sets the selected layer as the active layer
+layer = qgis.utils.iface.activeLayer()
+
+# The [0] represents the 1st field, so [1] is the 2nd field etc. To delete multiple fields, use the comma to separate. Eg. [0, 2, 4]
+res = layer.dataProvider().deleteAttributes([0])
+
+# Updates the layer with the changes
+layer.updateFields()
+
+
+
+
+
+
+layer = qgis.utils.iface.activeLayer()
+res = layer.dataProvider().deleteAttributes([0, 2, 3, 4, 5, 6, 7])
+layer.updateFields()
