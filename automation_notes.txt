@@ -25,6 +25,7 @@ ogr2ogr roads3.shp roads2.shp -sql "SELECT name FROM roads2 WHERE name > ''"
 6. Use ogr2ogr to create a points shapefile from simple feature nodes in roads3.shp.
 
 in progress...
+http://gis.stackexchange.com/questions/160357/extracting-all-vertices-from-line-shapefile-in-a-simple-way-no-python-scriptin
 
 7. Truncate existing PostGIS table osm_pts
 
