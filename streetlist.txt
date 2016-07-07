@@ -1,0 +1,2 @@
+STREET, CITY, ZIP, VERTEX COUNT
+Diane Road, King City, 93930 | 2
