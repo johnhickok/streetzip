@@ -89,6 +89,16 @@ GROUP BY osm_pts.name, zip_codes.zip_code, zip_codes.name
 ORDER BY osm_pts.name
 ;
 
+new query based on lines
+
+SELECT * FROM cal_zipcode
+join sf1
+ON ST_intersects(cal_zipcode.geom, sf1.geom)
+where sf1.name = 'five street'
+order by cal_zipcode.zip_code
+;
+
+
 A count of street name and zip code pairs was added as a quality check for your data.
 
 Use pgAdmin to extract a csv file from your spatial query's results. This example uses pipes as the delimiter in case any street names have commas. For California, there will be about a half million records in this file.
