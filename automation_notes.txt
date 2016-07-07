@@ -4,7 +4,7 @@ The steps below will use Python and GDAL uin the OSGEO4W shell:
 
 1. Use Python to download zip from geofabrik and extract roads shapefile
 
-in progress...
+python geofabrik_download_california.py
 
 2. Convert roads.shp to csv
 
