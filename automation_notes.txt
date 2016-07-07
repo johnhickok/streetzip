@@ -1,0 +1,149 @@
+﻿Sorry about the chaos! The following are some notes to myself for automating this project. As time permits, I'll make this into a batch file along with real documentation.
+
+The steps below will use Python and GDAL uin the OSGEO4W shell:
+
+1. Use Python to download zip from geofabrik and extract roads shapefile
+
+python geofabrik_download_california.py
+
+2. Convert roads.shp to csv
+
+ogr2ogr -f CSV roads.csv roads.shp -lco GEOMETRY=AS_WKT
+
+3. Replace all special non-UTF8 characters to UTF8; outputs file lineWKT.csv
+
+python convert_utf8.py
+
+4. Convert csv back to shp, using csv2shp.vrt.
+
+ogr2ogr road2s.shp csv2shp.vrt
+
+5. Use ogr2ogr and sql to extract only the names attribute with non null values.
+
+ogr2ogr roads3.shp roads2.shp -sql "SELECT name FROM roads2 WHERE name > ''"
+
+6. Use ogr2ogr to create a points shapefile from simple feature nodes in roads3.shp.
+
+in progress...
+http://gis.stackexchange.com/questions/160357/extracting-all-vertices-from-line-shapefile-in-a-simple-way-no-python-scriptin
+
+7. Truncate existing PostGIS table osm_pts
+
+psql -h pghost -p 5432 -U pguser -d pgdbname -c "TRUNCATE TABLE osm_pts;"
+
+psql = Your'e asking the shell to access a PostGIS database.
+-h pghost the postgress host name, i.e. localhost.
+-p 5432 is your computer/server's port number. By default, PostGIS uses port 5432.
+-U pguser your PostGIS login name.
+-d pgdbname the name of your database in PostGIS
+-c "TRUNCATE TABLE osm_pts;" is your SQL statement that truncates table osm_pts
+
+8. Append existing PostGIS table osm_points with the newly created osm_points shapefile.
+
+ogr2ogr -append -f "PostgreSQL" PG:"host=pghost user=pgloginname dbname=pgdbname password=pgpassword" "C:\\mydata\\osm_pts.shp" -nln osm_pts
+
+ogr2ogr -append -f "PostgreSQL" = You're asking ogr2ogr to append a PostGIS database
+PG:"" is where you provide your credentials between the quotes
+host=pghost is the PostGIS host name
+user=pgloginname is the PostGIS login
+dbname=pgdbname is the PostGIS database name
+password=pgpassword is the PostGIS password
+"C:\\mydata\\osm_pts.shp" is the shapefile you want to upload
+-nln osm_pts indicates the PostGIS table you are appending
+
+
+
+
+
+
+
+RAW NOTES BELOW:
+
+It may be easier to convert the raw shapefile from osm to csv first:
+Source: http://gis.stackexchange.com/questions/7339/converting-shapefiles-to-text-ascii-files
+Script: ogr2ogr -f CSV output.csv myshape.shp -lco GEOMETRY=AS_WKT
+
+DELETE FIELDS EXCEPT "name".
+
+http://gis.stackexchange.com/questions/109078/how-to-delete-column-field-in-pyqgis
+
+Method 2 - Deleting the fields directly by selecting the layer from the Layers window (Table of Contents) and using the following code:
+
+# Sets the selected layer as the active layer
+layer = qgis.utils.iface.activeLayer()
+
+# The [0] represents the 1st field, so [1] is the 2nd field etc. To delete multiple fields, use the comma to separate. Eg. [0, 2, 4]
+res = layer.dataProvider().deleteAttributes([0, 2, 3, 4, 5, 6, 7])
+
+# Updates the layer with the changes
+layer.updateFields()
+
+PyQGIS Cookbook
+http://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/
+
+modifying vector layers
+http://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/vector.html#modifying-vector-layers
+
+postgis and gdal
+http://www.postgresonline.com/journal/archives/31-GDAL-OGR2OGR-for-Data-Loading.html
+
+DONE - CONVERT ENTIRE DATASET TO UTF-8
+the unidecode Python library does this.
+
+To automate converting csv back to lines shapefile, the following test.vrt file will include
+
+<OGRVRTDataSource>
+    <OGRVRTLayer name="lineWKT">
+       <SrcDataSource>C:\Users\John\Downloads\temp\osm\lineWKT.csv</SrcDataSource>
+      <GeometryType>wkbLineString25D</GeometryType>
+ <LayerSRS>PROJCS["WGS_1984_Lambert_Conformal_Conic",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Lambert_Conformal_Conic"],PARAMETER["False_Easting",1000000.0],PARAMETER["False_Northing",1000000.0],PARAMETER["Central_Meridian",85.875],PARAMETER["Standard_Parallel_1",24.625],PARAMETER["Standard_Parallel_2",27.125],PARAMETER["Latitude_Of_Origin",25.8772525],UNIT["Meter",1.0]]</LayerSRS>
+ <GeometryField encoding="WKT" field='WKT' > </GeometryField >
+     </OGRVRTLayer>
+</OGRVRTDataSource>
+
+Then, enter the following into the OSGEO4W shell:
+ogr2ogr line.shp test.vrt
+
+Source: 
+http://gis.stackexchange.com/questions/24947/how-can-i-convert-a-csv-file-of-wkt-data-to-a-shape-file-using-ogr2ogr
+
+Problems:
+wrong projection - that looks like web mercator, need wgs84
+test turned California 90° - need to change the GeometryType tag
+
+OGR Virtual Format Documentation:
+http://www.gdal.org/drv_vrt.html
+
+CONVERT LINE FEATURES TO POINTS
+might need to convert line csv file to line shp file
+http://gis.stackexchange.com/questions/160357/extracting-all-vertices-from-line-shapefile-in-a-simple-way-no-python-scriptin
+
+ogr2ogr -f "ESRI Shapefile" -dialect sqlite -sql "select DissolvePoints(geometry) from multipoly" -explodecollections points.shp multipoly.shp
+
+
+DONE, PART - REPLACE POINTS TABLE IN POSTGIS
+Drop the existing table:
+psql -h pghost -p 5432 -U pguser -d pgdbname -c "TRUNCATE TABLE osm_pts;"
+
+psql = Your'e asking the shell to access a PostGIS database.
+-h pghost the postgress host name, i.e. localhost.
+-p 5432 is your computer/server's port number. By default, PostGIS uses port 5432.
+-U pguser your PostGIS login name.
+-d pgdbname the name of your database in PostGIS
+-c -c "TRUNCATE TABLE osm_pts;" is your SQL statement that truncates table osm_pts
+
+example: psql -h localhost -p 5432 -U postgres -d test_joins -c "TRUNCATE TABLE osm_pts;"
+
+Append your table with your shapefile:
+ogr2ogr -append -f "PostgreSQL" PG:"host=pghost user=pgloginname dbname=pgdbname password=pgpassword" "C:\\mydata\\osm_pts.shp" -nln osm_pts
+
+ogr2ogr -append -f "PostgreSQL" = You're asking ogr2ogr to append a PostGIS database
+PG:"" is where you provide your credentials between the quotes
+host=pghost is the PostGIS host name
+user=pgloginname is the PostGIS login
+dbname=pgdbname is the PostGIS database name
+password=pgpassword is the PostGIS password
+"C:\\mydata\\osm_pts.shp" is the shapefile you want to upload
+-nln osm_pts indicates the PostGIS table you are appending
+
+example: ogr2ogr -append -f "PostgreSQL" PG:"host=localhost user=postgres dbname=test_joins password=postgres"  "C:\\mydata\\osm_pts.shp" -nln osm_pts
