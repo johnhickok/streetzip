@@ -91,11 +91,16 @@ ORDER BY osm_pts.name
 
 new query based on lines
 
-SELECT * FROM cal_zipcode
-join sf1
-ON ST_intersects(cal_zipcode.geom, sf1.geom)
-where sf1.name = 'five street'
-order by cal_zipcode.zip_code
+SELECT
+roads.name st_name,
+zip_codes.zip_code AS zip,
+zip_codes.name AS community,
+COUNT(roads.name) as st_count,
+FROM zip_codes
+join roads
+ON ST_intersects(zip_codes.geom, roads.geom)
+GROUP BY roads.name, zip_codes.zip_code, zip_codes.name
+ORDER BY roads.name
 ;
 
 
