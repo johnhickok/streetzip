@@ -1,23 +1,29 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# sample_unidecode.py cleans out non-utf8 characters and replaces them with utf8. PostGIS is
-# sensitive; this step is extremely helpful. More info on the Python modules used are in the README.
+# convert_utf8.py inputs roads_wkt.csv and outputs roads_wkt_utf8.csv, containing only wkt and name fields.
+# It also replaces any special charcters with utf-8 characters usng the unidecode module. Note the unidecode
+# module is not included with standard Python; see https://pypi.python.org/pypi/Unidecode
 
+import csv
 from unidecode import unidecode
 
+# set up your unidecode function
 def remove_non_ascii(text):
     return unidecode(unicode(text, encoding = "utf-8"))
 
-# Each line of your infile_csv contains street names and coordinates from OpenStreeMap.
-# The output is converted to a shapefile or you can modify this script for parsing
-# direcly into PostGIS.
+infile_csv = open('roads_wkt.csv', 'r')
+outfile_csv = open('roads_wkt_utf8.sql', 'w')
 
-infile_csv = open('roads.csv', 'r')
-outfile_csv = open('lineWKT.csv', 'w')
+#outfile_csv.write('WKT,name\n')
 
-for s in infile_csv:
-    outfile_csv.write(remove_non_ascii(s))
-  
+with open('roads_wkt.csv', 'rb') as csvfile:
+    reader = csv.DictReader(csvfile, delimiter=',', quotechar='"')
+    for row in reader:
+        if row['name'] > '':
+            new_row = "INSERT INTO roads(name, geom) VALUES ('" + remove_non_ascii(row['name']) + "',ST_GeomFromText('" + row['WKT'] + "',4326));\n"
+            outfile_csv.write(new_row)
+
 infile_csv.close()
 outfile_csv.close()
+

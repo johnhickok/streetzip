@@ -1,18 +1,47 @@
-﻿Sorry about the chaos! The following are some notes to myself for automating this project. As time permits, I'll make this into a batch file along with real documentation.
+﻿Linux and Mac users can combine the two scheduled tasks. To enable Esri and OSGeo ecosystems to coexist peacefully, Windows users need to keep the two tasks separate. ArcGIS is not needed for any of the steps listed here.
 
-The steps below will use Python and GDAL uin the OSGEO4W shell:
+TASK 1 uses the OSGeo4W environment.
 
 1. Use Python to download zip from geofabrik and extract roads shapefile
-
 python geofabrik_download_california.py
 
 2. Convert roads.shp to csv
+call "C:\Program Files\QGIS Essen\bin\o4w_env.bat"
+ogr2ogr -f CSV roads_wkt.csv roads.shp -lco GEOMETRY=AS_WKT
 
-ogr2ogr -f CSV roads.csv roads.shp -lco GEOMETRY=AS_WKT
 
-3. Replace all special non-UTF8 characters to UTF8; outputs file lineWKT.csv
+TASK2 uses the unidecode Python library and PostGIS (non OSGeo environment).
 
+3. Extract only WKT and name fields for features that have street names. 
+Transliterates special characters to UTF-8. Inputs roads_wkt.csv and outputs roads_wkt_utf8.sql.
 python convert_utf8.py
+
+in progress...
+Add a function to remove ', ", and \ characters from name values
+Use the itertools Python library to break roads_wkt_utf8.sql file into smaller sizes
+
+
+4. Truncate existing PostGIS table roads
+psql -h pghost -p 5432 -U pguser -d pgdbname -q -c "TRUNCATE TABLE roads;"
+
+5. Append PostGIS table roads from a file.
+psql -h pghost -p 5432 -U pguser -d pgdbname -q -f roads_wkt_utf8.sql
+problem: this sql file is 807430 lines long; out of memory error
+
+6. Extract a csv from PostGIS containing street names, zip codes and postal cities
+in progress...
+
+7. Recreate updated streetz sqlite database with index
+in progress...
+
+
+
+
+
+
+OLD METHODS BELOW
+
+Below are previous steps that are superseded, but I'm not ready to throw away yet...
 
 4. Convert csv back to shp, using csv2shp.vrt.
 
