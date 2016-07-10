@@ -17,7 +17,6 @@ Transliterates special characters to UTF-8. Inputs roads_wkt.csv and outputs roa
 python convert_utf8.py
 
 in progress...
-Add a function to remove ', ", and \ characters from name values
 Use the itertools Python library to break roads_wkt_utf8.sql file into smaller sizes
 
 
