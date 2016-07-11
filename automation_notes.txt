@@ -25,10 +25,11 @@ psql -h pghost -p 5432 -U pguser -d pgdbname -q -c "TRUNCATE TABLE roads;"
 
 5. Append PostGIS table roads from a file.
 psql -h pghost -p 5432 -U pguser -d pgdbname -q -f roads_wkt_utf8.sql
-problem: this sql file is 807430 lines long; out of memory error
+
 
 6. Extract a csv from PostGIS containing street names, zip codes and postal cities
-in progress...
+psql -h pghost -p 5432 -U pguser -d pgdbname -q -f street_zip_summary.sql
+in progress...add flags to output to streetz.sql
 
 7. Recreate updated streetz sqlite database with index
 in progress...

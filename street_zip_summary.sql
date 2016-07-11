@@ -1,5 +1,5 @@
-﻿SELECT
-roads.name st_name,
+SELECT 
+roads.name AS st_name,
 zip_codes.zip_code AS zip,
 zip_codes.name AS community,
 COUNT(roads.name) as st_count
