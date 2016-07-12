@@ -28,8 +28,7 @@ psql -h pghost -p 5432 -U pguser -d pgdbname -q -f roads_wkt_utf8.sql
 
 
 6. Extract a csv from PostGIS containing street names, zip codes and postal cities
-psql -h pghost -p 5432 -U pguser -d pgdbname -q -f street_zip_summary.sql
-in progress...add flags to output to streetz.sql
+psql -h localhost -p 5432 -U postgres -d test_joins -q -o streetz.csv -A -t -f street_zip_summary.sql
 
 7. Recreate updated streetz sqlite database with index
 in progress...

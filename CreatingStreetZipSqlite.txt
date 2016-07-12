@@ -130,7 +130,7 @@ sqlite3 streetz.db
 
 Your console now becomes a command line version of sqlite. Enter the following into this console. It is assumed you named your extract from the previous step as streetz.csv.
 
-CREATE TABLE streetz (st_name text, st_count integer, zip text, community text);
+CREATE TABLE streetz (st_name text, community text, zip text, st_count integer);
 .separator '|'
 .import streetz.csv streetz
 CREATE INDEX streetz_index on streetz (st_name, zip);

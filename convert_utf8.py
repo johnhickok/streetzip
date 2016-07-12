@@ -26,6 +26,8 @@ with open('roads_wkt.csv', 'rb') as csvfile:
             name = remove_non_ascii(row['name'])
             name = name.replace('"','')
             name = name.replace("'","")
+            name = name.replace(',',' ')
+            name = name.replace('|','')
             name = name.replace('\\','')
             name = name.replace('\a','a')
             name = name.replace('\b','b')
