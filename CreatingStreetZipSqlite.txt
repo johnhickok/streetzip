@@ -25,6 +25,17 @@ If none of the above solutions are available, here is a hack that might work:
 - Open the file geodatabase in QGIS, select your state and 'Save As' the selected features to a shape file.
 
 
+If you use pgshapeloader, use the following to convert to LineString from UltiLineString:
+
+ALTER TABLE roads
+ALTER COLUMN geom TYPE geometry(linestring,4326) USING ST_GeometryN(geom, 1);
+
+
+
+
+
+
+
 
 2. CLEANUP OSM ROADS SHAPEFILE
 This next step is easily done with ArcGIS or QGIS, but exercize patience if your state is large. Using OGR utilities in the OSGeo4W Shell or UbuntuGIS for this step are not recommended because they don't handle non UTF-8 characters. More on that later.
