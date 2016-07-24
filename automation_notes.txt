@@ -18,7 +18,8 @@ python convert_utf8.py
 
 in progress...
 Use the itertools Python library to break roads_wkt_utf8.sql file into smaller sizes
-
+Help with using psql on the command line:
+https://www.postgresql.org/docs/9.2/static/app-psql.html
 
 4. Truncate existing PostGIS table roads
 psql -h pghost -p 5432 -U pguser -d pgdbname -q -c "TRUNCATE TABLE roads;"
