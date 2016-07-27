@@ -8,6 +8,8 @@ python geofabrik_download_california.py
 2. Convert roads.shp to csv
 call "C:\Program Files\QGIS Essen\bin\o4w_env.bat"
 ogr2ogr -f CSV roads_wkt.csv roads.shp -lco GEOMETRY=AS_WKT
+NOTE: you can also use arcpy for this step and let these steps run in a single task.
+See https://pro.arcgis.com/en/pro-app/arcpy/get-started/reading-geometries.htm
 
 
 TASK2 uses the unidecode Python library and PostGIS (non OSGeo environment).

@@ -50,6 +50,12 @@ Create a points shapfefile containing streetnames for every vertex of every road
 
 Finally, export these points to a comma separated text (csv) file containing street name, X (longitute) and Y (latitude) attributes. This is done in ArcMap by exporting your table as tab separated text, or in QGIS by right-clicking your shapefile and saving the file to CSV.
 
+You can also use arcpy to export shapefiles to csv, see
+https://pro.arcgis.com/en/pro-app/arcpy/get-started/reading-geometries.htm
+
+
+
+
 3. USE PYTHON TO CLEAN UP NON UTF-8 CHARACTERS.
 Street names across the United States reflect a rich heritage of historical names with origins from many lanuages. Many names includes special characters outside the standard UTF-8 character set like ñ or ç from Spanish or French. Though PostGIS is capable of importing data in character sets like Latin1, oddities in OSM data make importing these datasets problematic.
 
