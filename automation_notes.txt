@@ -1,18 +1,51 @@
-﻿Linux and Mac users can combine the two scheduled tasks. To enable Esri and OSGeo ecosystems to coexist peacefully, Windows users need to keep the two tasks separate. ArcGIS is not needed for any of the steps listed here.
+﻿STATEWIDE STREET NAME & ZIP CODE LOOKUP (STREETZ)
 
-TASK 1 uses the OSGeo4W environment.
+Having a current database of statewide street names with their corresponding ZIP Codes is a useful tool for many uses. Spatially joining GIS datasets as large as California's almost a million streets and 1700 ZIP Code polygons is a little hard to do with traditional desktop GIS software, and that is the reason this project was created.
 
-1. Use Python to download zip from geofabrik and extract roads shapefile
-python geofabrik_download_california.py
+This file explains the automation steps used in task1.bat and task2.bat.
 
-2. Convert roads.shp to csv
-call "C:\Program Files\QGIS Essen\bin\o4w_env.bat"
-ogr2ogr -f CSV roads_wkt.csv roads.shp -lco GEOMETRY=AS_WKT
-NOTE: you can also use arcpy for this step and let these steps run in a single task.
-See https://pro.arcgis.com/en/pro-app/arcpy/get-started/reading-geometries.htm
+On Windows, open source GIS installations set up a separate Python environment to allow Esri and OSGeo ecosystems to coexist peacefully, hence the tasks are split in the examples shown. Linux and Mac users can combine the two steps into a single scheduled task. If Esri's ArcGIS is installed, the tasks can also be combined when one of the steps is replaced by a Python script using Esri's arcpy library.
+
+TASK 1
+
+1. python geofabrik_download_california.py
+
+Simple Python script used for downloading California OpenStreetMap data, extracting the roads shapefile, and deleting files not needed.
 
 
-TASK2 uses the unidecode Python library and PostGIS (non OSGeo environment).
+2. call "C:\Program Files\QGIS Essen\bin\o4w_env.bat"
+
+This step may vary depending on which version of QGIS you installed. The batch file 04w_env.bat sets the environment variables so your Windows Console runs very much like the OSGeo4W shell.
+
+
+3. ogr2ogr -f CSV roads_wkt.csv roads.shp -lco GEOMETRY=AS_WKT
+
+This step uses ogr2ogr to convert roads.shp into roads_wkt.csv text file. Geometry is expressed as Well Known Text values, laid out very much like simple line features are displayed as text in PostGIS.
+
+NOTE: If you have ArcGIS installed, you can replace Steps 2 and 3 with Python and Esri's arcpy library. Please see Esri's support center, "Reading geometries" (http://desktop.arcgis.com/en/arcmap/latest/analyze/python/reading-geometries.htm)
+
+
+
+TASK2
+
+1. python convert_utf8.py
+
+This Python script filters out roads.shp segments without street names and extract only geometries and street name values. Special characters are also transleterated to their UTF-8 equivalents. The script inputs roads_wkt.csv and outputs roads_wkt_utf8.sql, a large list of insert statements for the next step.
+
+
+2. psql -h localhost -p 5432 -U postgres -d test_joins -q -c "TRUNCATE TABLE roads;"
+
+The above statement accesses your PostGIS database ffrom the Windows Console.
+
+
+
+
+
+
+
+OpenStreetMap data includes special characters from California's rich cultural heritage and input by mappers from numerous international keyboards.
+
+
 
 3. Extract only WKT and name fields for features that have street names. 
 Transliterates special characters to UTF-8. Inputs roads_wkt.csv and outputs roads_wkt_utf8.sql.
