@@ -2,7 +2,7 @@
 
 Having a current database of statewide street names with their corresponding ZIP Codes is a useful tool for many uses. Spatially joining GIS datasets as large as California's almost a million streets and 1700 ZIP Code polygons is a little hard to do with traditional desktop GIS software, and that is the reason this project was created.
 
-This file explains the automation steps used in task1.bat and task2.bat.
+This project is not formal geocoding. ZIP code values obtained by geospatial joining are at best a guess. Some incorrect spellings may exist for some streets after special charactes are removed. This project's purpose is to create data that will enhance your geocoding searches when miscommunication errors occur.
 
 On Windows, open source GIS installations set up a separate Python environment to allow Esri and OSGeo ecosystems to coexist peacefully, hence the tasks are split in the examples shown. Linux and Mac users can combine the two steps into a single scheduled task. If Esri's ArcGIS is installed, the tasks can also be combined when one of the steps is replaced by a Python script using Esri's arcpy library.
 
@@ -10,17 +10,17 @@ TASK 1
 
 1. python geofabrik_download_california.py
 
-Simple Python script used for downloading California OpenStreetMap data, extracting the roads shapefile, and deleting files not needed.
+Simple Python script used for downloading California OpenStreetMap data, extracting the roads shapefile roads.shp, and deleting the OpenStreetMap shapefiles you're not going to need.
 
 
 2. call "C:\Program Files\QGIS Essen\bin\o4w_env.bat"
 
-This step may vary depending on which version of QGIS you installed. The batch file 04w_env.bat sets the environment variables so your Windows Console runs very much like the OSGeo4W shell.
+This step may vary depending on which version of QGIS you installed. The batch file o4w_env.bat sets the environment variables so your Windows Console temporarily runs very much like the OSGeo4W shell.
 
 
 3. ogr2ogr -f CSV roads_wkt.csv roads.shp -lco GEOMETRY=AS_WKT
 
-This step uses ogr2ogr to convert roads.shp into roads_wkt.csv text file. Geometry is expressed as Well Known Text values, laid out very much like simple line features are displayed as text in PostGIS.
+This step uses ogr2ogr to convert your roads shapefile roads.shp into a comma separated value roads_wkt.csv. Geometry is expressed as Well Known Text values, laid out very much like when simple line feature geometries are displayed as text in PostGIS.
 
 NOTE: If you have ArcGIS installed, you can replace Steps 2 and 3 with Python and Esri's arcpy library. Please see Esri's support center, "Reading geometries" (http://desktop.arcgis.com/en/arcmap/latest/analyze/python/reading-geometries.htm)
 
@@ -30,184 +30,50 @@ TASK2
 
 1. python convert_utf8.py
 
-This Python script filters out roads.shp segments without street names and extract only geometries and street name values. Special characters are also transleterated to their UTF-8 equivalents. The script inputs roads_wkt.csv and outputs roads_wkt_utf8.sql, a large list of insert statements for the next step.
+OpenStreetMap road features include attributes we don't need (we only want street names), and some road features without street names are used for symbolizing unnamed symbols. This Python script filters out unneeded features, extracts only street name and geometry attributes, and transliterates special characters to their UTF-8 equivalents. The script inputs roads_wkt.csv and outputs roads_wkt_utf8.sql, which is a list of insert statements for the next step.
 
 
 2. psql -h localhost -p 5432 -U postgres -d test_joins -q -c "TRUNCATE TABLE roads;"
 
-The above statement accesses your PostGIS database ffrom the Windows Console.
+'psql' is how you access your PostGIS from the command line.
+'-h localhost' says you are accessing PostGIS as installed on your local PC.
+'-p 5432' is the port you are using for PostGIS.
+'-U postgres' is the PostGIS user name. This username is popular for beginners, but not a good approach if PostGIS is on a multi-user server.
+'-d test_joins' is your database name.
+'-q' says you are running in "quiet" mode. Statement results are not shown on the console.
+'-c "TRUNCATE TABLE roads;"' truncates your roads table.
 
 
+3. psql -h localhost -p 5432 -U postgres -d test_joins -q -c "DROP INDEX road_geom_idx;"
 
+The parameters are the same as above, except it removes your spatial index.
 
 
+4. psql -h localhost -p 5432 -U postgres -d test_joins -q -f roads_wkt_utf8.sql
 
+The parameters are similar to the above, except it's going to execute statements in a file roads_wkt_utf8.sql. This step may take a while, depending on your PC hardware. California will have over 800,000 insert statements to run.
 
-OpenStreetMap data includes special characters from California's rich cultural heritage and input by mappers from numerous international keyboards.
 
+5. psql -h localhost -p 5432 -U postgres -d test_joins -q -c "VACUUM ANALYZE roads;"
 
+Adding a vacuum analyze statement is a good practice after batch inserting a lot of records. This step helps your PostGIS database run faster.
 
-3. Extract only WKT and name fields for features that have street names. 
-Transliterates special characters to UTF-8. Inputs roads_wkt.csv and outputs roads_wkt_utf8.sql.
-python convert_utf8.py
 
-in progress...
-Use the itertools Python library to break roads_wkt_utf8.sql file into smaller sizes
-Help with using psql on the command line:
-https://www.postgresql.org/docs/9.2/static/app-psql.html
+6. psql -h localhost -p 5432 -U postgres -d test_joins -q -c "CREATE INDEX road_geom_idx ON roads USING gist(geom);"
 
-4. Truncate existing PostGIS table roads
-psql -h pghost -p 5432 -U pguser -d pgdbname -q -c "TRUNCATE TABLE roads;"
+This step re-creates your spatial index on your roads table.
 
-5. Append PostGIS table roads from a file.
-psql -h pghost -p 5432 -U pguser -d pgdbname -q -f roads_wkt_utf8.sql
 
+7. psql -h localhost -p 5432 -U postgres -d test_joins -q -o streetz.csv -A -t -f street_zip_summary.sql
 
-6. Extract a csv from PostGIS containing street names, zip codes and postal cities
-psql -h localhost -p 5432 -U postgres -d test_joins -q -o streetz.csv -A -t -f street_zip_summary.sql
+This statement includes a few parameters in addition to what we listed in Step 2:
+'-o streetz.csv' says you are going to output this statement's results into streetz.csv.
+'-A' says your comma separated text file output will not be aligned text.
+'-t' says you want tuples only. Your csv output will not include field names in the first row.
+'-f street_zip_summary.sql' will use PostGIS' spatial functions in file street_zip_summary.sql to create streetz.csv which lists every street name with its corresponding ZIP Code and postal city.
 
-7. Recreate updated streetz sqlite database with index
-in progress...
 
+8. python make_sqlite_db.py
 
+This final step uses Python create a SQLite database streetz.db with table streetz. The script imports values from streetz.csv into the streetz table and creates an index for speed.
 
-
-
-
-OLD METHODS BELOW
-
-Below are previous steps that are superseded, but I'm not ready to throw away yet...
-
-4. Convert csv back to shp, using csv2shp.vrt.
-
-ogr2ogr road2s.shp csv2shp.vrt
-
-5. Use ogr2ogr and sql to extract only the names attribute with non null values.
-
-ogr2ogr roads3.shp roads2.shp -sql "SELECT name FROM roads2 WHERE name > ''"
-
-6. Use ogr2ogr to create a points shapefile from simple feature nodes in roads3.shp.
-
-in progress...
-http://gis.stackexchange.com/questions/160357/extracting-all-vertices-from-line-shapefile-in-a-simple-way-no-python-scriptin
-
-7. Truncate existing PostGIS table osm_pts
-
-psql -h pghost -p 5432 -U pguser -d pgdbname -c "TRUNCATE TABLE osm_pts;"
-
-psql = Your'e asking the shell to access a PostGIS database.
--h pghost the postgress host name, i.e. localhost.
--p 5432 is your computer/server's port number. By default, PostGIS uses port 5432.
--U pguser your PostGIS login name.
--d pgdbname the name of your database in PostGIS
--c "TRUNCATE TABLE osm_pts;" is your SQL statement that truncates table osm_pts
-
-8. Append existing PostGIS table osm_points with the newly created osm_points shapefile.
-
-ogr2ogr -append -f "PostgreSQL" PG:"host=pghost user=pgloginname dbname=pgdbname password=pgpassword" "C:\\mydata\\osm_pts.shp" -nln osm_pts
-
-ogr2ogr -append -f "PostgreSQL" = You're asking ogr2ogr to append a PostGIS database
-PG:"" is where you provide your credentials between the quotes
-host=pghost is the PostGIS host name
-user=pgloginname is the PostGIS login
-dbname=pgdbname is the PostGIS database name
-password=pgpassword is the PostGIS password
-"C:\\mydata\\osm_pts.shp" is the shapefile you want to upload
--nln osm_pts indicates the PostGIS table you are appending
-
-
-
-
-
-
-
-RAW NOTES BELOW:
-
-It may be easier to convert the raw shapefile from osm to csv first:
-Source: http://gis.stackexchange.com/questions/7339/converting-shapefiles-to-text-ascii-files
-Script: ogr2ogr -f CSV output.csv myshape.shp -lco GEOMETRY=AS_WKT
-
-DELETE FIELDS EXCEPT "name".
-
-http://gis.stackexchange.com/questions/109078/how-to-delete-column-field-in-pyqgis
-
-Method 2 - Deleting the fields directly by selecting the layer from the Layers window (Table of Contents) and using the following code:
-
-# Sets the selected layer as the active layer
-layer = qgis.utils.iface.activeLayer()
-
-# The [0] represents the 1st field, so [1] is the 2nd field etc. To delete multiple fields, use the comma to separate. Eg. [0, 2, 4]
-res = layer.dataProvider().deleteAttributes([0, 2, 3, 4, 5, 6, 7])
-
-# Updates the layer with the changes
-layer.updateFields()
-
-PyQGIS Cookbook
-http://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/
-
-modifying vector layers
-http://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/vector.html#modifying-vector-layers
-
-postgis and gdal
-http://www.postgresonline.com/journal/archives/31-GDAL-OGR2OGR-for-Data-Loading.html
-
-DONE - CONVERT ENTIRE DATASET TO UTF-8
-the unidecode Python library does this.
-
-To automate converting csv back to lines shapefile, the following test.vrt file will include
-
-<OGRVRTDataSource>
-    <OGRVRTLayer name="lineWKT">
-       <SrcDataSource>C:\Users\John\Downloads\temp\osm\lineWKT.csv</SrcDataSource>
-      <GeometryType>wkbLineString25D</GeometryType>
- <LayerSRS>PROJCS["WGS_1984_Lambert_Conformal_Conic",GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]],PROJECTION["Lambert_Conformal_Conic"],PARAMETER["False_Easting",1000000.0],PARAMETER["False_Northing",1000000.0],PARAMETER["Central_Meridian",85.875],PARAMETER["Standard_Parallel_1",24.625],PARAMETER["Standard_Parallel_2",27.125],PARAMETER["Latitude_Of_Origin",25.8772525],UNIT["Meter",1.0]]</LayerSRS>
- <GeometryField encoding="WKT" field='WKT' > </GeometryField >
-     </OGRVRTLayer>
-</OGRVRTDataSource>
-
-Then, enter the following into the OSGEO4W shell:
-ogr2ogr line.shp test.vrt
-
-Source: 
-http://gis.stackexchange.com/questions/24947/how-can-i-convert-a-csv-file-of-wkt-data-to-a-shape-file-using-ogr2ogr
-
-Problems:
-wrong projection - that looks like web mercator, need wgs84
-test turned California 90° - need to change the GeometryType tag
-
-OGR Virtual Format Documentation:
-http://www.gdal.org/drv_vrt.html
-
-CONVERT LINE FEATURES TO POINTS
-might need to convert line csv file to line shp file
-http://gis.stackexchange.com/questions/160357/extracting-all-vertices-from-line-shapefile-in-a-simple-way-no-python-scriptin
-
-ogr2ogr -f "ESRI Shapefile" -dialect sqlite -sql "select DissolvePoints(geometry) from multipoly" -explodecollections points.shp multipoly.shp
-
-
-DONE, PART - REPLACE POINTS TABLE IN POSTGIS
-Drop the existing table:
-psql -h pghost -p 5432 -U pguser -d pgdbname -c "TRUNCATE TABLE osm_pts;"
-
-psql = Your'e asking the shell to access a PostGIS database.
--h pghost the postgress host name, i.e. localhost.
--p 5432 is your computer/server's port number. By default, PostGIS uses port 5432.
--U pguser your PostGIS login name.
--d pgdbname the name of your database in PostGIS
--c -c "TRUNCATE TABLE osm_pts;" is your SQL statement that truncates table osm_pts
-
-example: psql -h localhost -p 5432 -U postgres -d test_joins -c "TRUNCATE TABLE osm_pts;"
-
-Append your table with your shapefile:
-ogr2ogr -append -f "PostgreSQL" PG:"host=pghost user=pgloginname dbname=pgdbname password=pgpassword" "C:\\mydata\\osm_pts.shp" -nln osm_pts
-
-ogr2ogr -append -f "PostgreSQL" = You're asking ogr2ogr to append a PostGIS database
-PG:"" is where you provide your credentials between the quotes
-host=pghost is the PostGIS host name
-user=pgloginname is the PostGIS login
-dbname=pgdbname is the PostGIS database name
-password=pgpassword is the PostGIS password
-"C:\\mydata\\osm_pts.shp" is the shapefile you want to upload
--nln osm_pts indicates the PostGIS table you are appending
-
-example: ogr2ogr -append -f "PostgreSQL" PG:"host=localhost user=postgres dbname=test_joins password=postgres"  "C:\\mydata\\osm_pts.shp" -nln osm_pts
