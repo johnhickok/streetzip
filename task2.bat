@@ -28,3 +28,7 @@ echo %time% >> log1.txt
 psql -h localhost -p 5432 -U postgres -d test_joins -q -o streetz.csv -A -t -f street_zip_summary.sql
 echo extracted csv >> log1.txt
 echo %time% >> log1.txt
+
+python make_sqlite_db.py
+echo created sqlite, imported csv >> log1.txt
+echo %time% >> log1.txt
