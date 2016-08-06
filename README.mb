@@ -1,0 +1,21 @@
+Streets + Zip Codes Data Search
+
+This project was created to verify street name spelling for streets in California from OpenStreetMap (OSM) and ZIP Code polygons. Automating this process provides a good cross section for learning GDL/OGR, Python and the use of PostGIS as a geoprocessing tool.
+
+If you just want to check California street names, just download the Python streetzip.py and the sqlite database streetz.db. The text file streetlist.txt contains output from streetzip.py.
+
+
+
+
+
+
+
+
+
+CreatingStreetZipSqlite.txt explains the steps it takes to create streetz.db from OpenStreetMap data. This how-to is a work in progress, but there's enough to get you going. I'm polishing it as I have time.
+
+sample_unidecode.py was used to replace non-utf-8 characters from your OSM data before geoprocessing with PostGIS.
+
+summary.zip was removed to save space; a csv file can be easily extracted from streetz.db.
+
+

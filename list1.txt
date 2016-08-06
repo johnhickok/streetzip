@@ -1,0 +1,17 @@
+automation_notes.txt
+before_we_begin.txt
+convert_utf8.py
+create_tables.sql
+CreatingStreetZipSqlite.txt
+csv2shp.vrt
+geofabrik_download_california.py
+LICENSE
+list1.txt
+make_sqlite_db.py
+README.mb
+streetlist.txt
+streetz.db
+streetzip.py
+street_zip_summary.sql
+task1.bat
+task2.bat
