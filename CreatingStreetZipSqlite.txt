@@ -31,7 +31,14 @@ ALTER TABLE roads
 ALTER COLUMN geom TYPE geometry(linestring,4326) USING ST_GeometryN(geom, 1);
 
 
+PostGIS password file 
+https://www.postgresql.org/docs/9.0/static/libpq-pgpass.html
 
+The file .pgpass in a user's home directory or the file referenced by PGPASSFILE can contain passwords to be used if the connection requires a password (and no password has been specified otherwise). On Microsoft Windows the file is named %APPDATA%\postgresql\pgpass.conf (where %APPDATA% refers to the Application Data subdirectory in the user's profile).
+
+This file should contain lines of the following format:
+
+hostname:port:database:username:password
 
 
 
