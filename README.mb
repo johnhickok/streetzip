@@ -8,7 +8,7 @@ The process was split into task1.bat and task2.bat because of differing Python e
 
 A special thanks to those who provide GIS data:
 - Millions of OpenStreetMap (OSM) editors who make projects like this possible.
-- Geofabrik, for making regional downloads available (https://www.geofabrik.de/data/download.html)
+- Geofabrik, for making regional OSM downloads available (https://www.geofabrik.de/data/download.html)
 - Esri, for making a nationwide layer package of ZIP Code polygons available (https://www.arcgis.com/home/item.html?id=8d2012a2016e484dafaac0451f9aea24)
 
 Please understand that ZIP Code polygons provided by Esri are not accurate enough for geocoding and are likely outdated as of this writing. True ZIP Codes are part of the United States Postal System's internal operations and are based on routes, not polygons.
