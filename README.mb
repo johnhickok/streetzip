@@ -1,21 +1,18 @@
 Streets + Zip Codes Data Search
 
-This project was created to verify street name spelling for streets in California from OpenStreetMap (OSM) and ZIP Code polygons. Automating this process provides a good cross section for learning GDL/OGR, Python and the use of PostGIS as a geoprocessing tool.
+This project was created to verify street name spelling for streets in California from OpenStreetMap (OSM) and ZIP Code polygons. Automating this process provides a good cross section for learning GDL/OGR, Python and the use of PostGIS as a geoprocessing tool. In a nutshell, this project is a big spatial join.
 
 If you just want to check California street names, just download the Python streetzip.py and the sqlite database streetz.db. The text file streetlist.txt contains output from streetzip.py.
 
+The process was split into task1.bat and task2.bat because of differing Python environments in Windows. Details of these two batch files are described in automation_notes.txt.
 
+A special thanks to those who provide GIS data:
+- Millions of OpenStreetMap (OSM) editors who make projects like this possible.
+- Geofabrik, for making regional downloads available (https://www.geofabrik.de/data/download.html)
+- Esri, for making a nationwide layer package of ZIP Code polygons available (https://www.arcgis.com/home/item.html?id=8d2012a2016e484dafaac0451f9aea24)
 
+Please understand that ZIP Code polygons provided by Esri are not accurate enough for geocoding and are likely outdated as of this writing. True ZIP Codes are part of the United States Postal System's internal operations and are based on routes, not polygons.
 
-
-
-
-
-
-CreatingStreetZipSqlite.txt explains the steps it takes to create streetz.db from OpenStreetMap data. This how-to is a work in progress, but there's enough to get you going. I'm polishing it as I have time.
-
-sample_unidecode.py was used to replace non-utf-8 characters from your OSM data before geoprocessing with PostGIS.
-
-summary.zip was removed to save space; a csv file can be easily extracted from streetz.db.
-
-
+Other tools are available:
+USPS Tools: https://tools.usps.com
+Open Address Project: https://openaddresses.io/
