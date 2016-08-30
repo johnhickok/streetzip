@@ -10,6 +10,9 @@ https://www.geofabrik.de/data/download.html
 A nationwide layer package (lpk) file of ZIP Codes is available from Esri:
 https://www.arcgis.com/home/item.html?id=8d2012a2016e484dafaac0451f9aea24
 
+2015 USA counties from the US Census
+https://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html
+
 A shapefile of zipcode polygons can be extracted from this file, and Esri's ArcGIS is the highly recommended tool for this task. Esri offers free or low cost versions of its software:
 
 Free 60 Day Evaluation Edition (http://www.esri.com/software/arcgis/arcgis-for-desktop/free-trial)
