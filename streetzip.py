@@ -14,6 +14,7 @@ Blank entries retun everything.
 user_zip = raw_input( "Enter Zip Code:  " )
 user_street = raw_input( "Enter Part of Street Name:  " )
 user_city = raw_input( "Enter Part of City:  " )
+user_county = raw_input("Enter Part of County:  ")
 print ""
 
 # Create variables to display search terms back to the user
@@ -32,14 +33,21 @@ if user_city == "":
 else:
     user_city_display = user_city
 
+if user_county == "":
+    user_county_display = "Any"
+else:
+    user_county_display = user_county
+
+
+
 # Open streetlist.txt and add user search terms and field headers
 streetlist_file = open("streetlist.txt", "w")
-streetlist_file.write("Your search: Street = '" + user_street_display + "', City = '" + user_city_display + "', ZIP Code = '" + user_zip_display + "'\n\n")
+streetlist_file.write("Your search: Street = '" + user_street_display + "', City = '" + user_city_display + "', ZIP Code = '" + user_zip_display + "', County = '" + user_county_display + "'\n\n")
 streetlist_file.write("STREET, CITY, STATE + ZIP\n")
 
 # parse a query search string qsearch and iterate database output into streetlist.txt
 c = sqlite3.connect('streetz.db')
-qsrch = "SELECT [st_name], [community], [zip], [st_count] FROM streetz WHERE zip like '%" + user_zip + "%' AND st_name like '%" + user_street + "%' AND community like '%" + user_city + "%' ORDER BY [st_name], [zip]"
+qsrch = "SELECT [st_name], [community], [zip], [st_count] FROM streetz WHERE zip like '%" + user_zip + "%' AND st_name like '%" + user_street + "%' AND community like '%" + user_city + "%' AND county like '%" + user_county + "%' ORDER BY [st_name], [zip]"
 for row in c.execute(qsrch):
   streetlist_file.write(str(row[0]) + ", " + str(row[1]) + ", CA " + str(row[2]) + "\n")
 
