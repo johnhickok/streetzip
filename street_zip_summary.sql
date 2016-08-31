@@ -1,4 +1,4 @@
-﻿SELECT 
+SELECT 
 roads.name AS st_name,
 zip_codes.name AS community,
 zip_codes.zip_code AS zip,
