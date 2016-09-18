@@ -6,17 +6,17 @@
 # Import modules, create sqlite database file and table
 import csv, sqlite3
 c = sqlite3.connect('.\\streetz.db')
-c.execute("CREATE TABLE streetz (st_name text, community text, zip text, county text, st_count integer);")
+c.execute("CREATE TABLE streetz (st_name text, community text, zip text, st_count integer);")
 
 # Iterate values from streetz.csv, insert values into table streetz
 reader = csv.reader(open('streetz.csv', 'r'), delimiter='|')
 for row in reader:
-    to_db = [row[0], row[1], row[2], row[3], row[4]]
-    c.execute("INSERT INTO streetz (st_name, community, zip, county, st_count) VALUES (?, ?, ?, ?, ?);", to_db)
+    to_db = [row[0], row[1], row[2], row[3]]
+    c.execute("INSERT INTO streetz (st_name, community, zip, st_count) VALUES (?, ?, ?, ?);", to_db)
 c.commit()
 
 # Create index
-c.execute("CREATE INDEX streetz_index on streetz (st_name, zip, county);")
+c.execute("CREATE INDEX streetz_index on streetz (st_name, zip);")
 
 
 #st_name|community|zip|county|st_count

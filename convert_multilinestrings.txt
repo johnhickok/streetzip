@@ -1,0 +1,30 @@
+Use qgis and select a small, clean selection of roads features with no special non-UTF8 characters.
+
+Export your selection to a small shapefile.
+
+Remove all but the name field.
+
+Use shp2pgsql-gui.exe, found in
+C:\Program Files\PostgreSQL\9.5\bin\postgisgui
+
+and upload your small shapefile into your database.
+
+Open PGADMIN, navigate to your database and open the SQL window.
+
+By default, the PG shapeloader converted your shapefile to a table with your geom field being of type MULTILINESTRING.
+
+As an example, type in the following:
+
+select gid, name, st_astext(geom) from roads;
+
+To make sure you don't have any multilinestring, enter the following:
+
+SELECT COUNT(CASE WHEN ST_NumGeometries(geom) > 1 THEN 1 END) AS multi_geom,
+COUNT(geom) AS total_geom
+FROM roads;
+
+To convert the geom field to LINESTRING from MULTILINESTRING, enter
+(see http://gis.stackexchange.com/questions/49950/converting-mulitlinestring-to-linestring-in-postgresql-with-postgis)
+
+ALTER TABLE roads
+ALTER COLUMN geom TYPE geometry(linestring,4326) USING ST_GeometryN(geom, 1);

@@ -9,7 +9,7 @@ psql -h localhost -p 5432 -U postgres -d test_joins -q -c "TRUNCATE TABLE roads;
 echo truncated table >> log1.txt
 echo %time% >> log1.txt
 
-psql -h localhost -p 5432 -U postgres -d test_joins -q -c "DROP INDEX road_geom_idx;"
+psql -h localhost -p 5432 -U postgres -d test_joins -q -c "DROP INDEX roads_geom_idx;"
 echo dropped spatial index >> log1.txt
 echo %time% >> log1.txt
 
@@ -21,7 +21,7 @@ psql -h localhost -p 5432 -U postgres -d test_joins -q -c "VACUUM ANALYZE roads;
 echo vacuumed roads >> log1.txt
 echo %time% >> log1.txt
 
-psql -h localhost -p 5432 -U postgres -d test_joins -q -c "CREATE INDEX road_geom_idx ON roads USING gist(geom);"
+psql -h localhost -p 5432 -U postgres -d test_joins -q -c "CREATE INDEX roads_geom_idx ON roads USING gist(geom);"
 echo created spatial index >> log1.txt
 echo %time% >> log1.txt
 
