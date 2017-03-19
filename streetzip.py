@@ -1,7 +1,6 @@
-# streetzip.py queries streetz.db sqlite database streetz.db and appends a list of zipcodes
+# streetzip.py queries sqlite database streetz.db and appends a list of zipcodes
 # and street names into streetlist.txt. The streetz.db file contains an indexed list
 # of street names and zipcodes extracted from OpenStreetMap data for California.
-# Methods and data sources are in the REAME.
 
 import webbrowser, sqlite3
 
@@ -35,12 +34,16 @@ else:
 
 # Open streetlist.txt and add user search terms and field headers
 streetlist_file = open("streetlist.txt", "w")
-streetlist_file.write("Your search: Street = '" + user_street_display + "', City = '" + user_city_display + "', ZIP Code = '" + user_zip_display + "', County = '" + "'\n\n")
+streetlist_file.write("Data per OpenStreetMap!\n")
+streetlist_file.write("Your search: Street = '" + user_street_display + "', City = '" + 
+user_city_display + "', ZIP Code = '" + user_zip_display + "'\n\n")
 streetlist_file.write("STREET, CITY, STATE + ZIP\n")
 
 # parse a query search string qsearch and iterate database output into streetlist.txt
 c = sqlite3.connect('streetz.db')
-qsrch = "SELECT [st_name], [community], [zip], [st_count] FROM streetz WHERE zip like '%" + user_zip + "%' AND st_name like '%" + user_street + "%' AND community like '%" + user_city + "%' ORDER BY [st_name], [zip]"
+qsrch = ("SELECT [st_name], [community], [zip], [st_count] FROM streetz WHERE zip like '%" + 
+user_zip + "%' AND st_name like '%" + user_street + "%' AND community like '%" + user_city + 
+"%' ORDER BY [st_name], [zip]")
 for row in c.execute(qsrch):
   streetlist_file.write(str(row[0]) + ", " + str(row[1]) + ", CA " + str(row[2]) + "\n")
 
