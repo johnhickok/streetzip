@@ -2,35 +2,35 @@
 
 Having a current database of statewide street names with their corresponding ZIP Codes is a useful tool for many uses. Spatially joining GIS datasets as large as California's almost a million streets and 1700 ZIP Code polygons is a little hard to do with traditional desktop GIS software, and that is the reason this project was created.
 
-This project is not formal geocoding. ZIP code values obtained by geospatial joining are at best a guess. Some incorrect spellings may exist for some streets after special charactes are removed. This project's purpose is to create data that will enhance your geocoding searches when miscommunication errors occur.
+This project is not formal geocoding. ZIP code values obtained by geospatial joining are at best a guess. Some incorrect spellings may exist for some streets after special characters are removed. This project's purpose is to create data that will enhance your geocoding searches when miscommunication errors occur.
 
 On Windows, open source GIS installations set up a separate Python environment to allow Esri and OSGeo ecosystems to coexist peacefully, hence the tasks are split in the examples shown. Linux and Mac users can combine the two steps into a single scheduled task. If Esri's ArcGIS is installed, the tasks can also be combined when one of the steps is replaced by a Python script using Esri's arcpy library.
 
-TASK 1
+TASK1.bat
 
 1. python geofabrik_download_california.py
 
-Simple Python script used for downloading California OpenStreetMap data, extracting the roads shapefile roads.shp, and deleting the OpenStreetMap shapefiles you're not going to need.
+Python script downloads California OpenStreetMap data, unpacks the roads shapefile roads.shp, and delets the other OpenStreetMap data you're not going to need.
 
 
 2. call "C:\Program Files\QGIS Essen\bin\o4w_env.bat"
 
-This step may vary depending on which version of QGIS you installed. The batch file o4w_env.bat sets the environment variables so your Windows Console temporarily runs very much like the OSGeo4W shell.
+This step may vary depending on which version of QGIS you installed. The batch file o4w_env.bat sets the environment variables so your Windows Console can run GDAL/OGR geoprocessing tools.
 
 
 3. ogr2ogr -f CSV roads_wkt.csv roads.shp -lco GEOMETRY=AS_WKT
 
-This step uses ogr2ogr to convert your roads shapefile roads.shp into a comma separated value roads_wkt.csv. Geometry is expressed as Well Known Text values, laid out very much like when simple line feature geometries are displayed as text in PostGIS.
+This step uses ogr2ogr to convert your roads shapefile roads.shp into a comma separated value roads_wkt.csv. Simple features geometry is expressed as Well Known Text values for each feature.
 
 NOTE: If you have ArcGIS installed, you can replace Steps 2 and 3 with Python and Esri's arcpy library. Please see Esri's support center, "Reading geometries" (http://desktop.arcgis.com/en/arcmap/latest/analyze/python/reading-geometries.htm)
 
 
 
-TASK2
+TASK2.bat
 
 1. python convert_utf8.py
 
-OpenStreetMap road features include attributes we don't need (we only want street names), and some road features without street names are used for symbolizing unnamed symbols. This Python script filters out unneeded features, extracts only street name and geometry attributes, and transliterates special characters to their UTF-8 equivalents. The script inputs roads_wkt.csv and outputs roads_wkt_utf8.sql, which is a list of insert statements for the next step.
+The script inputs roads_wkt.csv, extracts street features with non null street names, and parses each feature into a PostGIS INSERT statement that includes only the street name and its geometry. The script also uses the unidecode Python library to transliterate special characters to their UTF-8 equivalents. The final output is roads_wkt_utf8.sql.
 
 
 2. psql -h localhost -p 5432 -U postgres -d test_joins -q -c "TRUNCATE TABLE roads;"
@@ -76,4 +76,3 @@ This statement includes a few parameters in addition to what we listed in Step 2
 8. python make_sqlite_db.py
 
 This final step uses Python create a SQLite database streetz.db with table streetz. The script imports values from streetz.csv into the streetz table and creates an index for speed.
-
